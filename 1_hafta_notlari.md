@@ -45,38 +45,39 @@ Verinin sistemdeki yolculuğu temel olarak 3 aşamadan oluşur:
 
 ---
 
-# 3. Gün Notları - Python Temelleri, Veri Yapıları ve İleri Seviyeye Giriş (14 Ekim 2026)
+## 📅 3. Gün: Python Temelleri, Veri Yapıları ve İleri Seviyeye Giriş (14 Ekim 2026)
 
-## 1. Geliştirme Ortamı ve Değişkenler
+### 1. Geliştirme Ortamı ve Değişkenler
 * Kod yazmak ve veri analizlerini test edebilmek için **Jupyter Notebook** ortamı kuruldu.
 * **Değişkenler (Variables):** Değerleri saklamak için ayrılmış bellek alanlarıdır. Python değişkenin tipini otomatik algılar.
 
 ### Temel Veri Tipleri (Data Types) ve Dönüşümler
-Python'da kullanılan temel veri türleri şunlardır[span_0](start_span)[span_0](end_span):
-1. **Integer (Tam Sayı):** `a = 4`[span_1](start_span)[span_1](end_span)
-2. **Float (Ondalıklı):** `b = 5.6`[span_2](start_span)[span_2](end_span)
-3. **String (Metin):** `x = 'M'` veya `y = "MHM"`[span_3](start_span)[span_3](end_span)
-4. **Boolean (Mantıksal):** `x = True` veya `y = False`[span_4](start_span)[span_4](end_span)
-5. **Complex (Karmaşık Sayı):** `x = 4+5j`[span_5](start_span)[span_5](end_span)
+Python'da kullanılan temel veri türleri şunlardır:
+1. **Integer (Tam Sayı):** `a = 4`
+2. **Float (Ondalıklı):** `b = 5.6`
+3. **String (Metin):** `x = 'M'` veya `y = "MHM"`
+4. **Boolean (Mantıksal):** `x = True` veya `y = False`
+5. **Complex (Karmaşık Sayı):** `x = 4+5j`
 
-* **Tip Dönüşümleri (Type Conversions):** Elimizdeki veriyi başka bir tipe dönüştürmek için `float(x)`, `str(x)` veya `bool(x)` gibi fonksiyonlar kullanılır[span_6](start_span)[span_6](end_span).
+* **Tip Dönüşümleri (Type Conversions):** Elimizdeki veriyi başka bir tipe dönüştürmek için `float(x)`, `str(x)` veya `bool(x)` gibi fonksiyonlar kullanılır.
 
-## 2. Python Veri Yapıları (Data Structures)
-Algoritmik düşüncede veriyi tutma şeklimiz çok önemlidir. Python'da 4 temel veri yapısı işlendi[span_7](start_span)[span_7](end_span):
+### 2. Python Veri Yapıları (Data Structures)
+Algoritmik düşüncede veriyi tutma şeklimiz çok önemlidir. Python'da 4 temel veri yapısı işlendi:
 
-* **Tuple (Demet):** `a = (1, 2, 3, 4)` veya parantezsiz `a = 1, 2, 3, 4` şeklinde tanımlanır. İçeriği değiştirilemeyen (immutable) veri yapısıdır[span_8](start_span)[span_8](end_span).
-* **List (Liste):** `a = [1, 2, 3, 4]` şeklinde köşeli parantezle tanımlanır[span_9](start_span)[span_9](end_span). Sıralıdır ve elemanları daha sonradan değiştirilebilir (mutable).
-* **Set (Küme):** `a = {1, 2, 3, 4, 4}` şeklinde süslü parantezle tanımlanır[span_10](start_span)[span_10](end_span). Matematikteki kümeler gibidir, tekrarlayan (mükerrer) eleman barındırmaz.
-* **Dictionary (Sözlük):** `a = {1: 2, 2: 3}` şeklinde tanımlanır[span_11](start_span)[span_11](end_span). Verileri Anahtar-Değer (Key-Value) çiftleri halinde tutar. Elemanlara indeks numarasıyla değil, anahtar kelimeyle (örn: `a[1]`) erişilir[span_12](start_span)[span_12](end_span).
+* **Tuple (Demet):** `a = (1, 2, 3, 4)` veya parantezsiz `a = 1, 2, 3, 4` şeklinde tanımlanır. İçeriği değiştirilemeyen (immutable) veri yapısıdır.
+* **List (Liste):** `a = [1, 2, 3, 4]` şeklinde köşeli parantezle tanımlanır. Sıralıdır ve elemanları daha sonradan değiştirilebilir (mutable).
+* **Set (Küme):** `a = {1, 2, 3, 4, 4}` şeklinde süslü parantezle tanımlanır. Matematikteki kümeler gibidir, tekrarlayan (mükerrer) eleman barındırmaz.
+* **Dictionary (Sözlük):** `a = {1: 2, 2: 3}` şeklinde tanımlanır. Verileri Anahtar-Değer (Key-Value) çiftleri halinde tutar. Elemanlara indeks numarasıyla değil, anahtar kelimeyle (örn: `a[1]`) erişilir.
 
-## 3. Faydalı Fonksiyonlar ve Kavramlar
-* **`range()` Fonksiyonu:** Belirli bir aralıkta sayılar üretmek için kullanılır[span_13](start_span)[span_13](end_span). Örneğin `range(6)` ile 0'dan 5'e kadar sayılar üretilir[span_14](start_span)[span_14](end_span). Bu sayılar doğrudan listeye (`list(range(5))`), demete (`tuple(range(5))`) veya kümeye (`set(range(5))`) dönüştürülebilir[span_15](start_span)[span_15](end_span).
-* **Keywords (Anahtar Kelimeler):** Python'un kendi işleyişi için rezerve ettiği kelimelerdir (örn: `None`)[span_16](start_span)[span_16](end_span). Bu kelimeler değişken adı olarak kullanılamaz. Bir kelimenin rezerve edilip edilmediği `import keyword` kütüphanesi kullanılarak `keyword.iskeyword('None')` fonksiyonu ile kontrol edilebilir[span_17](start_span)[span_17](end_span).
+### 3. Faydalı Fonksiyonlar ve Kavramlar
+* **`range()` Fonksiyonu:** Belirli bir aralıkta sayılar üretmek için kullanılır. Örneğin `range(6)` ile 0'dan 5'e kadar sayılar üretilir. Bu sayılar doğrudan listeye (`list(range(5))`), demete (`tuple(range(5))`) veya kümeye (`set(range(5))`) dönüştürülebilir.
+* **Keywords (Anahtar Kelimeler):** Python'un kendi işleyişi için rezerve ettiği kelimelerdir (örn: `None`). Bu kelimeler değişken adı olarak kullanılamaz. Bir kelimenin rezerve edilip edilmediği `import keyword` kütüphanesi kullanılarak `keyword.iskeyword('None')` fonksiyonu ile kontrol edilebilir.
 
-## 4. İleri Seviye Python'a (Advanced Python) Giriş
+### 4. İleri Seviye Python'a (Advanced Python) Giriş
 Günün sonuna doğru ve 4. güne sarkan bölümde, daha ileri seviye Python kütüphanelerine ve dosya okuma işlemlerine giriş yapıldı:
 * **Multithreading (Eşzamanlı İşlemler):** Programın farklı parçalarının aynı anda (eşzamanlı) çalışmasını sağlayarak tasarımı basitleştirmek için `import threading` modülü işlendi. `threading.active_count()`, `threading.current_thread()` gibi fonksiyonlar incelendi.
 * **CSV Dosyası İşlemleri:** Dışarıdan bir veri setini (`Singapore_Residents.csv`) Python'a aktarmak için standart `import csv` kütüphanesi ile okuma yapıldı.
+* **Pandas'a İlk Bakış:** Veri biliminin en önemli kütüphanelerinden olan Pandas (`import pandas as pd`) ile veri setleri içeri aktarıldı (`pd.read_csv()`). Veriyi filtrelemek için temel sorgu komutları çalıştırıldı.
 
 ---
 
