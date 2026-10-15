@@ -45,7 +45,7 @@ Verinin sistemdeki yolculuğu temel olarak 3 aşamadan oluşur:
 
 ---
 
-## 📅 3. Gün: Python Temelleri, Veri Yapıları ve İleri Seviyeye Giriş (14 Ekim 2026)
+## 3. Gün: Python Temelleri, Veri Yapıları ve İleri Seviyeye Giriş (14 Ekim 2026)
 
 ### 1. Geliştirme Ortamı ve Değişkenler
 * Kod yazmak ve veri analizlerini test edebilmek için **Jupyter Notebook** ortamı kuruldu.
@@ -77,7 +77,6 @@ Algoritmik düşüncede veriyi tutma şeklimiz çok önemlidir. Python'da 4 teme
 Günün sonuna doğru ve 4. güne sarkan bölümde, daha ileri seviye Python kütüphanelerine ve dosya okuma işlemlerine giriş yapıldı:
 * **Multithreading (Eşzamanlı İşlemler):** Programın farklı parçalarının aynı anda (eşzamanlı) çalışmasını sağlayarak tasarımı basitleştirmek için `import threading` modülü işlendi. `threading.active_count()`, `threading.current_thread()` gibi fonksiyonlar incelendi.
 * **CSV Dosyası İşlemleri:** Dışarıdan bir veri setini (`Singapore_Residents.csv`) Python'a aktarmak için standart `import csv` kütüphanesi ile okuma yapıldı.
-* **Pandas'a İlk Bakış:** Veri biliminin en önemli kütüphanelerinden olan Pandas (`import pandas as pd`) ile veri setleri içeri aktarıldı (`pd.read_csv()`). Veriyi filtrelemek için temel sorgu komutları çalıştırıldı.
 
 ---
 
