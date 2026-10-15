@@ -1,1 +1,1 @@
-# softITo-Veri_Analiti-i
+# softITo-Veri_Analitigi
