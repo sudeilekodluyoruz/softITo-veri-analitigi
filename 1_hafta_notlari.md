@@ -65,31 +65,45 @@ Python'da verinin tipini `type()` fonksiyonu ile öğrenebiliriz:
 
 ---
 
-## 4. Gün: Veri Bilimi Ekosistemi ve NumPy (15 Ekim 2026)
+# 4. Gün Notları - Veri Bilimi Ekosistemi ve NumPy Kütüphanesine Giriş (15 Ekim 2026)
 
-### Veri Bilimi İçin Python Kütüphaneleri (Ecosystem)
-* **ETL (Çıkarma, Dönüştürme, Yükleme):** pandas, BeautifulSoup, Intake.
+Bugün Advanced Python (İleri Python) konularını tamamlayarak Veri Bilimi için Python kütüphaneleri ekosistemine ve çok boyutlu veri manipülasyonu sağlayan NumPy kütüphanesine (`import numpy as np`) giriş yaptık.
+
+## Veri Bilimi İçin Python Kütüphaneleri (Data Science Ecosystem)
+Veri bilimi süreçleri ve bu süreçlerde kullanılan temel kütüphaneler şu şekildedir:
+* **Extract, Transform, Load (ETL):** pandas, BeautifulSoup, Intake.
 * **Data Exploration (Veri Keşfi):** Seaborn, matplotlib.
 * **Data Evaluation (Veri Değerlendirme):** NumPy, TensorFlow.
-* **Data Modeling (Veri Modelleme):** scikit-learn, SciPy, statsmodels.
+* **Data Modeling (Veri Modelleme):** scikit-learn, SciPy, statsmodels (SM).
 * **Data Presentation (Veri Sunumu):** matplotlib, HoloViews, VisPy.
 
-### NumPy Veri Türleri ve `.dtype`
-NumPy, belleği verimli kullanmak için standart Python türlerinden daha detaylı tipler sunar (`np.int64`, `np.float32` vb.).
-* Elemanların tipini öğrenmek için `.dtype` kullanılır. *(Örn: `np.array([1.32, 5.78]).dtype`)*
+## NumPy Dizileri (Arrays) Oluşturma ve Veri Türleri
+Python listelerini doğrudan işlemek yerine hız ve esneklik kazanmak için NumPy dizilerine dönüştürürüz:
+* **Listeden Diziye Çevirme:** `np.array(liste_adi)` kullanılarak standart bir Python listesi (örneğin bir Sudoku matrisi) NumPy dizisine dönüştürülür.
+* **Sentetik Dizi Oluşturma:** Büyük verilerle çalışmadan önce kodları test etmek için `np.arange()` (belirli aralıklarda dizi oluşturma) veya `np.zeros()` (sıfırlarla dolu dizi oluşturma) gibi fonksiyonlar kullanılır.
+* **Veri Tipi Öğrenme (`.dtype` & `type()`):** Standart Python türlerinden (`int`, `float`) farklı olarak NumPy, belleği daha verimli kullanmak için `np.int64`, `np.float32` gibi detaylı tipler sunar. Bir dizinin içindeki elemanların tipini `.dtype` ile, nesnenin kendi tipini ise `type()` ile öğreniriz.
 
-### 2B Dizilerde Boyut (Axis) Kavramı
-* **Birinci Boyut (Axis 0):** Satırları temsil eder (Yukarıdan aşağıya).
-* **İkinci Boyut (Axis 1):** Sütunları temsil eder (Soldan sağa).
+## 2B ve 3B Dizilerde Boyut (Axis) ve Şekil (Shape) Kavramı
+Matris yapılarında işlem yaparken eksenlerin (axis) yönünü ve dizinin şeklini bilmek kritik önem taşır:
+* **.shape Özniteliği:** Dizinin boyutlarını (satır, sütun, derinlik) verir. Örneğin; `(675, 843, 3)` çıktısı 675 satır, 843 sütun ve 3 renk kanalından (RGB) oluşan bir resmi temsil eder.
+* **Birinci Boyut (Axis 0):** Satırları temsil eder (Yukarıdan aşağıya doğru).
+* **İkinci Boyut (Axis 1):** Sütunları temsil eder (Soldan sağa doğru).
+* **Üçüncü Boyut (Axis 2):** Derinliği (örneğin RGB renk kanallarını) temsil eder.
 
-### NumPy Veri Manipülasyonu Fonksiyonları
-* **`np.delete()`:** Veri silmek için kullanılır. Eksen belirtilmezse diziyi tek boyuta indirgeyip siler. `axis=1` verilirse o indeksteki sütunu tamamen siler.
-* **`np.where()`:** Belirli bir koşulu sağlayan verilerin indekslerini bulur. *(Örn: `np.where(tree_census[:, 1] == 313879)`)*
-* **`np.arange()`:** Belirli aralıklarda ve adımlarla dizi oluşturur.
+## NumPy ile Veri Manipülasyonu Fonksiyonları
+* **`np.split()` ile Bölme:** Çok boyutlu bir diziyi alt dizilere ayırır. Örneğin, bir RGB resim matrisini kırmızı, yeşil ve mavi kanallarına ayırmak için `axis=2` argümanı kullanılır.
+* **`np.where()` ile Filtreleme ve Koşullu Değiştirme:** 
+  * Belirli bir koşulu sağlayan verilerin **indekslerini** bulur (Örn: `np.where(agac_verisi[:, 1] == 313879)`).
+  * Koşula bağlı **değer değiştirme** işlemi yapar. Örneğin, `np.where(blue_array > blue_array.mean(), 255, blue_array)` kodu ile ortalamadan büyük olan piksel değerleri 255 (maksimum mavi) ile değiştirilerek vurgulanır.
+* **`np.delete()` ile Silme:** Eksen belirtilmezse çok boyutlu dizi tek boyuta indirgenir ve belirtilen indeks silinir. `axis=1` verilirse o indeksteki sütun tamamen silinir.
+* **`.reshape()` ile Yeniden Şekillendirme:** Dizilerin satır ve sütun sayılarını değiştirmek için kullanılır. Farklı dizileri birleştirebilmek için şekillerinin uyumlu olması gerekir.
+* **`np.stack()` ile İstifleme (Birleştirme):** Şekilleri aynı olan farklı dizileri (örneğin Red, Green ve Blue dizilerini) üst üste koyarak tek bir çok boyutlu dizi oluşturur.
 
-### Matplotlib ile Görselleştirmeye Giriş
-* **`plt.scatter(x, y)`:** Dağılım (scatter) grafiği oluşturur.
-* **`plt.show()`:** Arka planda çizilen grafiği ekranda gösterir.
+## Veri Görselleştirmeye İlk Bakış: Matplotlib
+Matplotlib kütüphanesi (`import matplotlib.pyplot as plt`) kullanılarak temel görselleştirmeler yapılabilir:
+* **`plt.scatter(x, y)`:** x ve y eksenlerindeki değerleri kullanarak dağılım (scatter) grafiği oluşturur.
+* **`plt.imshow(dizi)`:** İstiflenmiş (stack) çok boyutlu dizi verilerini (RGB gibi) bir resim olarak ekrana basmak için hazırlanır.
+* **`plt.show()`:** Arka planda çizilen grafiği veya resmi ekranda göstermek için kullanılır.
 
 ---
 *5. Gün: *
