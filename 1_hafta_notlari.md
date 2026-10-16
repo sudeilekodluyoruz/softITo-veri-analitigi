@@ -127,44 +127,45 @@ Bugün sabah oturumunda NumPy dizileri üzerinde matematiksel özetlemeler, dizi
 
 ### 1. NumPy: Veri Toplulaştırma (Aggregation) ve Eksen (Axis)
 Büyük veri setlerini özetlemek için NumPy fonksiyonları kullanılır:
-* **Temel Metotlar:** Verileri özetlemek için `.sum()`, `.min()`, `.max()`, `.mean()` ve `.cumsum()` fonksiyonları kullanılır[span_0](start_span)[span_0](end_span).
-* **Genel Toplam:** Bir matrise eksen belirtilmeden `.sum()` uygulandığında matristeki tüm elemanların genel toplamı elde edilir[span_1](start_span)[span_1](end_span).
-* **Eksen Belirterek Toplama (`axis=1`):** `security_breaches.sum(axis=1)` kodu, satırlar boyunca toplama yaparak 1 boyutlu (1D) bir dizi döndürür[span_2](start_span)[span_2](end_span).
-* **Boyut Koruma (`keepdims=True`):** İşlem sonucunda matrisin orijinal boyut yapısını kaybetmemek (örneğin 2D sütun matrisi olarak kalmasını sağlamak) için `keepdims=True` parametresi kullanılır[span_3](start_span)[span_3](end_span).
+* **Temel Metotlar:** Verileri özetlemek için `.sum()`, `.min()`, `.max()`, `.mean()` ve `.cumsum()` fonksiyonları kullanılır.
+* **Genel Toplam:** Bir matrise eksen belirtilmeden `.sum()` uygulandığında matristeki tüm elemanların genel toplamı elde edilir.
+* **Eksen Belirterek Toplama (`axis=1`):** `security_breaches.sum(axis=1)` kodu, satırlar boyunca toplama yaparak 1 boyutlu (1D) bir dizi döndürür.
+* **Boyut Koruma (`keepdims=True`):** İşlem sonucunda matrisin orijinal boyut yapısını kaybetmemek (örneğin 2D sütun matrisi olarak kalmasını sağlamak) için `keepdims=True` parametresi kullanılır.
 
 ### 2. NumPy: Vektörleştirilmiş İşlemler ve Dizi Yığma
-* **Vektörleştirilmiş İşlemler (Vectorization):** Python'daki yavaş döngüler yerine tüm dizi üzerinde aynı anda matematiksel işlem yapmayı sağlar[span_4](start_span)[span_4](end_span).
-* **Dizileri Yığma (Stacking):** Farklı matrisler birleştirilerek daha büyük yapılar oluşturulabilir. Örneğin iki adet 3x3 matris yan yana birleştirilerek 3x6 boyutunda yeni bir matris elde edilir[span_5](start_span)[span_5](end_span).
+* **Vektörleştirilmiş İşlemler (Vectorization):** Python'daki yavaş döngüler yerine tüm dizi üzerinde aynı anda matematiksel işlem yapmayı sağlar.
+* **Dizileri Yığma (Stacking):** Farklı matrisler birleştirilerek daha büyük yapılar oluşturulabilir. Örneğin iki adet 3x3 matris yan yana birleştirilerek 3x6 boyutunda yeni bir matris elde edilir.
 
 ### 3. NumPy: Dilimleme (Slicing) ve Görüntü İşleme
 Görseller bilgisayarda satır, sütun ve renk kanallarından (RGB) oluşan matrisler olarak tutulur:
-* **Renk Kanallarını Dilimleme:** 3 boyutlu bir `rgb` dizisinden belirli renk kanallarını izole etmek için `:` operatörü kullanılır[span_6](start_span)[span_6](end_span). (Örn: Kırmızı kanal için `red_array = rgb[:, :, 0]`)[span_7](start_span)[span_7](end_span).
-* **Görüntüyü Çevirme (`np.flip`):** Görseli geometrik olarak tamamen ters çevirir[span_8](start_span)[span_8](end_span). Eğer eksen belirtilirse (`np.flip(logo, axis=2)`) görselin geometrisi bozulmadan yalnızca renk kanallarının sırası tersine çevrilerek renk paleti değiştirilir[span_9](start_span)[span_9](end_span).
-* **Koşullu Renk Güncelleme:** `np.where()` koduyla logodaki belirli pikseller tespit edilip renkleri değiştirilebilir[span_10](start_span)[span_10](end_span). (Örn: Beyaz arka planı koyu gri yaparak karanlık tema uygulamak)[span_11](start_span)[span_11](end_span).
+* **Renk Kanallarını Dilimleme:** 3 boyutlu bir `rgb` dizisinden belirli renk kanallarını izole etmek için `:` operatörü kullanılır. (Örn: Kırmızı kanal için `red_array = rgb[:, :, 0]`).
+* **Görüntüyü Çevirme (`np.flip`):** Görseli geometrik olarak tamamen ters çevirir. Eğer eksen belirtilirse (`np.flip(logo, axis=2)`) görselin geometrisi bozulmadan yalnızca renk kanallarının sırası tersine çevrilerek renk paleti değiştirilir.
+* **Koşullu Renk Güncelleme:** `np.where()` koduyla logodaki belirli pikseller tespit edilip renkleri değiştirilebilir. (Örn: Beyaz arka planı koyu gri yaparak karanlık tema uygulamak).
 
 ---
 
 ### 4. Pandas: Veri Bilimi Ekosistemi ve Dikdörtgensel Veri
-* **Dikdörtgensel Veri (Tabular Data):** Satır ve sütunlardan oluşan yapılandırılmış veri modelidir[span_12](start_span)[span_12](end_span).
-* **Pandas'ın Temeli:** Pandas kütüphanesi (`import pandas as pd`), hesaplama gücünü ve görselleştirme desteğini doğrudan NumPy ve Matplotlib kütüphaneleri üzerinden alır[span_13](start_span)[span_13](end_span).
+* **Dikdörtgensel Veri (Tabular Data):** Satır ve sütunlardan oluşan yapılandırılmış veri modelidir.
+* **Pandas'ın Temeli:** Pandas kütüphanesi (`import pandas as pd`), hesaplama gücünü ve görselleştirme desteğini doğrudan NumPy ve Matplotlib kütüphaneleri üzerinden alır.
 
 ### 5. Pandas: DataFrame Bileşenleri ve Keşif
 Pandas'ın ana veri yapısı olan DataFrame üç temel bileşenden oluşur:
-* **`.to_numpy()`:** DataFrame içerisindeki verileri iki boyutlu bir NumPy dizisi (`array`) olarak döndürür[span_14](start_span)[span_14](end_span).
-* **`.columns` & `.index`:** Sütun adlarını tutan yapı `.columns` ile, satır indeksleri ise `.index` ile görüntülenir[span_15](start_span)[span_15](end_span).
+* **`.to_numpy()`:** DataFrame içerisindeki verileri iki boyutlu bir NumPy dizisi (`array`) olarak döndürür.
+* **`.columns` & `.index`:** Sütun adlarını tutan yapı `.columns` ile, satır indeksleri ise `.index` ile görüntülenir.
 
 Veri setini hızlıca tanımak için kullanılan metotlar:
 * **`.head()`:** İlk birkaç satırı döndürür.
 * **`.info()`:** Sütun isimleri, eksik veri sayıları ve veri tipleri hakkında teknik özet sunar.
 * **`.shape`:** DataFrame'in satır ve sütun sayısını verir.
-* **`.describe()`:** Sayısal sütunların istatistiksel özetlerini (`count`, `mean`, `std`, `min`, `max` vb.) hesaplar[span_16](start_span)[span_16](end_span).
+* **`.describe()`:** Sayısal sütunların istatistiksel özetlerini (`count`, `mean`, `std`, `min`, `max` vb.) hesaplar.
 
 ### 6. Pandas: Sıralama ve Alt Kümeleme (Subsetting)
-* **Verileri Sıralama (`.sort_values()`):** DataFrame içerisindeki satırları belirli sütunlara göre sıralar. (Örn: `dogs.sort_values("weight_kg")`)[span_17](start_span)[span_17](end_span).
-* **Sütun Seçme:** Sadece belirli bir sütunu ayırmak için `dogs["name"]` kullanılır[span_18](start_span)[span_18](end_span).
-* **Koşullu Satır Filtreleme:** Satırları belirli bir şarta göre filtrelemek için kullanılır. (Örn: `dogs[dogs["height_cm"] > 50]`)[span_19](start_span)[span_19](end_span).
-* **Birden Çok Koşulla Filtreleme:** Birden fazla koşulu aynı anda uygulamak için `&` (ve) operatörü kullanılır[span_20](start_span)[span_20](end_span). (Örn: `dogs[(dogs["breed"] == "Labrador") & (dogs["color"] == "Brown")]`)[span_21](start_span)[span_21](end_span).
+* **Verileri Sıralama (`.sort_values()`):** DataFrame içerisindeki satırları belirli sütunlara göre sıralar. (Örn: `dogs.sort_values("weight_kg")`).
+* **Sütun Seçme:** Sadece belirli bir sütunu ayırmak için `dogs["name"]` kullanılır.
+* **Koşullu Satır Filtreleme:** Satırları belirli bir şarta göre filtrelemek için kullanılır. (Örn: `dogs[dogs["height_cm"] > 50]`).
+* **Birden Çok Koşulla Filtreleme:** Birden fazla koşulu aynı anda uygulamak için `&` (ve) operatörü kullanılır. (Örn: `dogs[(dogs["breed"] == "Labrador") & (dogs["color"] == "Brown")]`).
 
 ---
 **1. Hafta Tamamlandı** Bu hafta algoritmik düşünceye, Python temellerine, NumPy matris işlemlerine ve Pandas ile veri manipülasyonuna sağlam bir giriş yapıldı.
+
 
