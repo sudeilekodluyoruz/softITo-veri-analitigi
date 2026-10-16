@@ -61,7 +61,7 @@ Python'da kullanılan temel veri türleri şunlardır:
 
 * **Tip Dönüşümleri (Type Conversions):** Elimizdeki veriyi başka bir tipe dönüştürmek için `float(x)`, `str(x)` veya `bool(x)` gibi fonksiyonlar kullanılır.
 
-### 2. Python Veri Yapıları (Data Structures)
+## 2. Python Veri Yapıları (Data Structures)
 Algoritmik düşüncede veriyi tutma şeklimiz çok önemlidir. Python'da 4 temel veri yapısı işlendi:
 
 * **Tuple (Demet):** `a = (1, 2, 3, 4)` veya parantezsiz `a = 1, 2, 3, 4` şeklinde tanımlanır. İçeriği değiştirilemeyen (immutable) veri yapısıdır.
@@ -80,7 +80,7 @@ Günün sonuna doğru ve 4. güne sarkan bölümde, daha ileri seviye Python kü
 
 ---
 
-# 4. Gün Notları - Veri Bilimi Ekosistemi ve NumPy Kütüphanesine Giriş (15 Ekim 2026)
+## 4. Gün Notları - Veri Bilimi Ekosistemi ve NumPy Kütüphanesine Giriş (15 Ekim 2026)
 
 Bugün Advanced Python (İleri Python) konularını tamamlayarak Veri Bilimi için Python kütüphaneleri ekosistemine ve çok boyutlu veri manipülasyonu sağlayan NumPy kütüphanesine (`import numpy as np`) giriş yaptık.
 
