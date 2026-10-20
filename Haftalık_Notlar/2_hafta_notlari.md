@@ -1,4 +1,4 @@
-### SoftITo Veri Analitiği - 1. Hafta Notları
+# SoftITo Veri Analitiği - 2. Hafta Notları
 ## 6. Gün: Pandas ile Veri İşleme ve Manipülasyon (19 Ekim 2026)
 
 Bugün, dikdörtgensel verileri (tabular data) işlemek için Veri Bilimi dünyasının en popüler kütüphanesi olan Pandas'ı detaylıca inceledik. Çeşitli veri setleri (`homelessness.csv`, `sales_subset.csv`, `avocados_2016.csv` vb.) üzerinde işlemler yaptık.
