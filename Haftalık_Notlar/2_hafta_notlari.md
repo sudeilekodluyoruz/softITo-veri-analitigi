@@ -55,7 +55,7 @@ Pandas'ta `.pivot_table()`, `.groupby()` işleminin bir alternatifidir ve özell
   * Silme: `.dropna()`
   * Değiştirme/Doldurma: `.fillna(0)` (Örn: Boş verileri sıfır ile doldurma).
  
- ##  7.Gün İleri Seviye Pandas: Veri Birleştirme ve Şekillendirme (20 Ekim 2026)
+##  7.Gün:  İleri Seviye Pandas (Veri Birleştirme ve Şekillendirme) (20 Ekim 2026)
 
 ### 1. Temel Birleştirme İşlemleri (Merges & Joins)
 Farklı DataFrame'leri ortak sütunlar (key) üzerinden ilişkilendirmek için `.merge()` metodu kullanılır:
