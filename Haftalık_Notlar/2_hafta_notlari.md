@@ -54,3 +54,45 @@ Pandas'ta `.pivot_table()`, `.groupby()` işleminin bir alternatifidir ve özell
   * Kontrol: `.isna().any()`
   * Silme: `.dropna()`
   * Değiştirme/Doldurma: `.fillna(0)` (Örn: Boş verileri sıfır ile doldurma).
+ 
+ ##  7.Gün İleri Seviye Pandas: Veri Birleştirme ve Şekillendirme (20 Ekim 2026)
+
+### 1. Temel Birleştirme İşlemleri (Merges & Joins)
+Farklı DataFrame'leri ortak sütunlar (key) üzerinden ilişkilendirmek için `.merge()` metodu kullanılır:
+* **İç Birleşim (Inner Join):** Sadece her iki tabloda da eşleşen değere sahip satırları döndürür. (Örn: `df1.merge(df2, on='vid')`).
+* **Sonekler (Suffixes):** Birleştirilen tablolarda aynı isimde sütunlar varsa (örneğin iki tabloda da `name` varsa), çakışmayı önlemek için kullanılır. (Örn: `suffixes=('_own', '_veh')`).
+* **Bire-Çoka (One-to-Many) İlişkiler:** Sol tablodaki tek bir kayıt, sağ tabloda birden fazla kayıtla eşleşiyorsa, sol tablodaki veri çoğaltılarak listelenir (Örn: Bir müşterinin birden fazla siparişinin olması).
+* **Çoklu Birleştirme:** İkiden fazla tablo metod zincirleme ile tek satırda birleştirilebilir: `df1.merge(df2, on='col').merge(df3, on='col')`.
+* **Farklı Sütun İsimleriyle Birleştirme:** Ortak veriyi tutan sütunların isimleri tablolarda farklıysa `left_on` ve `right_on` argümanları kullanılır. (Örn: `left_on='id', right_on='movie_id'`).
+
+### 2. Farklı Birleştirme Türleri (`how` Argümanı)
+Birleştirme mantığı `.merge(how='...')` argümanı ile değiştirilebilir:
+* **`how='left'` (Left Join):** Sol tablodaki tüm satırları tutar, sağ tabloda eşleşme bulunamayan satırların karşılığını `NaN` (boş değer) ile doldurur. Bir ana veriyi diğer tablolardaki ek bilgilerle zenginleştirmek için idealdir.
+* **`how='right'` (Right Join):** Sağ tablodaki tüm satırları tutar, solda karşılığı olmayanları `NaN` yapar.
+* **`how='outer'` (Outer Join):** Her iki tablodaki tüm satırları getirir. Eksik eşleşmeler `NaN` olur. Tablolar arasındaki farklılıkları ve veri eksikliklerini bulmak için çok kullanışlıdır.
+* **Self Join (Kendi Kendine Birleştirme):** Bir tablonun yine kendisiyle birleştirilmesidir (`df.merge(df, on='id')`). Hiyerarşik verilerde (örn: çalışan-yönetici ilişkisi) aynı sütundaki değerleri birbiriyle kıyaslamak için kullanılır.
+
+### 3. Filtreleyen Birleştirmeler (Filtering Joins)
+* **Semi Join (Yarı Birleştirme):** Sol tabloyu, yalnızca sağ tabloda eşleşmesi olan satırları tutacak şekilde filtreler. 
+  * *Uygulanışı:* İç birleşim yapılır, sağ tablodan dönen ortak ID'ler bir değişkene atanır ve sol tabloda `.isin()` metoduyla filtrelenir.
+* **Anti Join:** Sol tabloda olup sağ tabloda *hiçbir karşılığı olmayan* kayıtları bulur. 
+  * *Uygulanışı:* `how='left', indicator=True` argümanlarıyla birleştirilir, ardından `_merge == 'left_only'` olan satırlar filtrelenir.
+
+### 4. Dikey Birleştirme (Concatenation)
+Ortak sütun yapılarına sahip farklı veri setlerini (örneğin 3 farklı ayın faturasını) alt alta eklemek için `pd.concat()` kullanılır:
+* `pd.concat([df1, df2, df3])` şeklinde DataFrame listesi alır.
+* `ignore_index=True`: Alt alta eklenen tabloların eski indeks numaralarını silip `0`'dan `n-1`'e kadar yeniden ve sıralı bir indeks oluşturur.
+* `keys=['A', 'B']`: Verilerin hangi orijinal tablodan geldiğini ayırmak için hiyerarşik (multi-level) bir indeks ekler.
+
+### 5. Sıralı ve Zaman Serisi Verilerini Birleştirme
+Özellikle tarih/zaman ve finansal analizlerde hizalama yapmak için geliştirilmiş özel fonksiyonlardır:
+* **`pd.merge_ordered()`:** Sıralı verileri birleştirmek için kullanılır (varsayılanı outer join'dir). `fill_method='ffill'` (ileri doldurma) argümanı sayesinde eksik veya farklı frekanstaki zaman verilerini (örn: aylık vs üç aylık veri) mantıklı değerlerle enterpole edebilir.
+* **`pd.merge_asof()`:** Zaman damgaları saniyesi saniyesine eşleşmediğinde, "en yakın ve en son" zamandaki veriyi eşleştirir. Borsa verilerindeki milisaniyelik gecikmeleri veya tam eşleşmeyen tarihleri hizalamak için kritik bir araçtır.
+
+### 6. Gelişmiş Sorgulama ve Şekillendirme
+* **`.query()`:** Mantıksal koşullar kullanarak DataFrame satırlarını SQL benzeri temiz bir metin (string) sözdizimi ile filtreler.
+  * *Örnek:* `df.query('gdp_per_capita > 50000')` veya `df.query('date >= "1991-01-01"')`.
+* **`.melt()`:** Geniş formattaki (wide) verileri uzun formata (long) çevirmek (unpivot işlemi) için kullanılır. Dağınık verileri görselleştirmeye (plot) uygun hale getirir.
+  * `id_vars`: Satırlarda sabit kalacak tanımlayıcı sütunlar.
+  * `var_name`: Eski başlıkların toplanacağı yeni kategori sütununun adı.
+  * `value_name`: Eski sayısal değerlerin toplanacağı yeni değer sütununun adı.
