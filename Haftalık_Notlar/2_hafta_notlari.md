@@ -97,7 +97,7 @@ Ortak sütun yapılarına sahip farklı veri setlerini (örneğin 3 farklı ayı
   * `var_name`: Eski başlıkların toplanacağı yeni kategori sütununun adı.
   * `value_name`: Eski sayısal değerlerin toplanacağı yeni değer sütununun adı.
  
-##  8.Gün: İlişkisel Veritabanları (PostgreSQL) ve Python ETL Süreçleri (23 Ekim 2026)
+##  8.Gün: İlişkisel Veritabanları (PostgreSQL) ve Python ETL Süreçleri (21 Ekim 2026)
 
 Bugün yapılandırılmış verilerin depolandığı İlişkisel Veritabanı Yönetim Sistemlerine (RDBMS) geçiş yaparak **PostgreSQL** ve **pgAdmin** kurulumlarını tamamladık. Özellikle Python kullanarak veritabanına otomatik veri aktarımı (ETL) yapmayı öğrendik.
 
