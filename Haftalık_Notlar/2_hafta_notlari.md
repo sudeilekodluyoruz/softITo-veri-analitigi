@@ -96,3 +96,41 @@ Ortak sütun yapılarına sahip farklı veri setlerini (örneğin 3 farklı ayı
   * `id_vars`: Satırlarda sabit kalacak tanımlayıcı sütunlar.
   * `var_name`: Eski başlıkların toplanacağı yeni kategori sütununun adı.
   * `value_name`: Eski sayısal değerlerin toplanacağı yeni değer sütununun adı.
+ 
+##  8.Gün: İlişkisel Veritabanları (PostgreSQL) ve Python ETL Süreçleri (23 Ekim 2026)
+
+Bugün yapılandırılmış verilerin depolandığı İlişkisel Veritabanı Yönetim Sistemlerine (RDBMS) geçiş yaparak **PostgreSQL** ve **pgAdmin** kurulumlarını tamamladık. Özellikle Python kullanarak veritabanına otomatik veri aktarımı (ETL) yapmayı öğrendik.
+
+### 1. PostgreSQL Tablolarını Toplu Silme (`drop_all_tables.sql`)
+Geliştirme aşamasında veritabanını sıfırlamak için kullandığımız SQL bloğu ve komutların detayları[cite: 41]:
+
+*   **`DO $$ ... END $$;`**: PostgreSQL'de isimsiz (anonim) bir PL/pgSQL kod bloğu başlatır[cite: 41].
+*   **`FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = current_schema())`**: Veritabanının mevcut şemasındaki (genellikle `public` şeması) tüm tablo isimlerini bulur ve işlemi bir döngüye sokar[cite: 41].
+*   **`EXECUTE 'DROP TABLE IF EXISTS ... CASCADE';`**: Döngüde bulunan her bir tabloyu siler. Buradaki kritik nokta olan `CASCADE` komutu, silinen tabloya bağlı olan diğer yapıların (örneğin yabancı anahtarlar - foreign keys veya görünümler - views) da otomatik olarak düşürülmesini sağlar ve hata alınmasını engeller[cite: 41].
+
+### 2. Python ile Otomatik Veri Aktarımı (ETL Süreci)
+Farklı CSV dosyalarını tek tek pgAdmin üzerinden içeri aktarmak (import) yerine, `postgre_import_csv.py` dosyası ile tam otomatik bir veri mühendisliği (Data Engineering) boru hattı (pipeline) geliştirdik[cite: 42]. 
+
+Betik (script) temelde 4 aşamadan oluşur:
+
+**Adım 1: Kütüphaneler ve Veritabanı Bağlantısı**
+*   Veritabanı ile iletişim kurmak için `sqlalchemy` kütüphanesinin `create_engine` fonksiyonu kullanıldı[cite: 42].
+*   `postgresql+psycopg2://kullanici:sifre@localhost:5432/eu_soccer` formatında oluşturulan bağlantı dizesi (connection string) ile PostgreSQL'e güvenli bir köprü kuruldu[cite: 42].
+
+**Adım 2: Dosyaların Bulunması ve Tablo İsimlendirme**
+*   **`glob.glob()`**: Belirlenen klasördeki (Örn: `1_manupilate`) tüm `.csv` uzantılı dosyaları otomatik olarak tarayıp bulur[cite: 42].
+*   **Regex (`re.sub`)**: CSV dosya isimlerindeki boşlukları veya geçersiz karakterleri alt çizgiye (`_`) çevirip küçük harfe dönüştürerek, PostgreSQL standartlarına %100 uygun, temiz tablo isimleri üretir[cite: 42].
+
+**Adım 3: Veri Temizleme ve Hizalama (Data Cleaning & Padding)**
+Python'ın yerleşik `csv.reader` modülü kullanılarak veriler satır satır okundu ve oluşabilecek veri bozulmalarının önüne geçildi[cite: 42]:
+*   **Eksik Sütun Tamamlama (Padding):** Eğer bir satırdaki veri sayısı, başlık (header) sayısından azsa, aradaki fark `None` değerleri ile doldurulur (Bu değerler PostgreSQL'e aktarılırken `NULL` olarak yansır). Böylece aktarımın yapısal bir hata verip çökmesi engellenir[cite: 42].
+*   **Fazla Sütun Kırpma (Truncating):** Eğer bir satırda başlıktan daha fazla veri varsa, fazla olan veriler kesilerek (truncate) tablo yapısı korunur[cite: 42].
+
+**Adım 4: SQL'e Yazma İşlemi**
+*   Temizlenen satırlar bir Pandas DataFrame'ine (`pd.DataFrame`) dönüştürülür[cite: 42].
+*   **`df.to_sql()`**: DataFrame'i doğrudan PostgreSQL'e bir tablo olarak yazar. `if_exists="fail"` parametresi ile tablonun zaten var olması durumunda yanlışlıkla üzerine yazılması engellenir. `index=False` parametresi ile Pandas'ın varsayılan indeks numaralarının gereksiz yere veritabanına kaydedilmesi önlenir[cite: 42].
+
+### 3. Kullanılan Örnek Veri Setleri
+Bu otomasyon scripti ile aşağıdaki çeşitli veri setleri PostgreSQL içerisine başarıyla aktarıldı:
+*   **Avrupa Futbol Verileri:** Ülkeler (`country`), Ligler (`league`), Takımlar (`team`), Maçlar (`match`).
+ 
