@@ -135,7 +135,7 @@ Bu otomasyon scripti ile aşağıdaki çeşitli veri setleri PostgreSQL içerisi
 *   **Avrupa Futbol Verileri:** Ülkeler (`country`), Ligler (`league`), Takımlar (`team`), Maçlar (`match`).
 
 
-## 8. Gün: SQL ile İleri Seviye Veri Manipülasyonu - CASE İfadeleri ve Alt Sorgular (26 Ekim 2026)
+## 8. Gün: SQL ile İleri Seviye Veri Manipülasyonu - CASE İfadeleri ve Alt Sorgular (22 Ekim 2026)
 
 Bugün PostgreSQL kullanarak Avrupa Futbol Veritabanı (`eu_soccer`) üzerinde daha karmaşık veri manipülasyonu işlemleri gerçekleştirdik. Temel odak noktamız, verileri koşullu olarak kategorize eden `CASE` ifadeleri ve sorgu içinde sorgu yazmamızı sağlayan `Subqueries` (Alt Sorgular) oldu.
 
@@ -152,19 +152,26 @@ SELECT
     COUNT(id) AS total_matches
 FROM matches_germany
 GROUP BY home_team;
-Sütunları Karşılaştırma: Farklı sütunlardaki değerleri (örneğin ev sahibi ve deplasman golleri) kıyaslayarak maçın sonucunu (Galibiyet, Mağlubiyet, Beraberlik) bulmak için kullanılır:SQLSELECT 
+
+Sütunları Karşılaştırma: Farklı sütunlardaki değerleri (örneğin ev sahibi ve deplasman golleri) kıyaslayarak maçın sonucunu (Galibiyet, Mağlubiyet, Beraberlik) bulmak için kullanılır:
+```sql
+SELECT
     date,
     CASE WHEN home_goal > away_goal THEN 'Home win!'
          WHEN home_goal < away_goal THEN 'Home loss :(' 
          ELSE 'Tie' END AS outcome
 FROM matches_spain;
-Çoklu Koşullar ve Filtre Olarak CASE: Birden fazla koşulu kontrol etmek için AND operatörü kullanılır. Ayrıca, sadece ilgilendiğimiz sonuçları getirmek için CASE ifadelerini WHERE bloğunda bir filtreleme aracı olarak (takma ad vermeden) kullanabiliriz:SQLSELECT season, date, home_goal, away_goal
+
+Çoklu Koşullar ve Filtre Olarak CASE: Birden fazla koşulu kontrol etmek için AND operatörü kullanılır. Ayrıca, sadece ilgilendiğimiz sonuçları getirmek için CASE ifadelerini WHERE bloğunda bir filtreleme aracı olarak (takma ad vermeden) kullanabiliriz:```sql
+SELECT season, date, home_goal, away_goal
 FROM matches_italy
 WHERE 
     CASE WHEN hometeam_id = 9857 AND home_goal > away_goal THEN 'Bologna Win'
          WHEN awayteam_id = 9857 AND away_goal > home_goal THEN 'Bologna Win' 
          END IS NOT NULL;
-2. Toplama Fonksiyonlarıyla CASE Kullanımı (Conditional Aggregation)CASE ifadelerini SUM() veya AVG() gibi toplu (aggregate) fonksiyonların içine yerleştirerek, yalnızca belirli koşulları sağlayan veriler üzerinde hesaplama yapılabilir.Belirli Bir Takımın Gollerini Toplama: Sadece takımın ev sahibi olduğu veya deplasmanda olduğu maçlardaki gollerini ayırarak toplamak:   SQLSELECT season,
+
+2. Toplama Fonksiyonlarıyla CASE Kullanımı (Conditional Aggregation)CASE ifadelerini SUM() veya AVG() gibi toplu (aggregate) fonksiyonların içine yerleştirerek, yalnızca belirli koşulları sağlayan veriler üzerinde hesaplama yapılabilir.Belirli Bir Takımın Gollerini Toplama: Sadece takımın ev sahibi olduğu veya deplasmanda olduğu maçlardaki gollerini ayırarak toplamak:   ```sql
+ELECT season,
     SUM(CASE WHEN hometeam_id = 8560 THEN home_goal END) AS home_goals,
     SUM(CASE WHEN awayteam_id = 8560 THEN away_goal END) AS away_goals
 FROM match
@@ -176,17 +183,23 @@ Kesir ve Yüzde Hesaplama (AVG ile): Koşulu sağlayanları 1, sağlamayanları 
 FROM country AS c
 LEFT JOIN matches AS m ON c.id = m.country_id
 GROUP BY country;
-3. Alt Sorgular (Subqueries)Alt sorgular (iç içe sorgular), karmaşık filtrelemeler yapmak veya tek bir sorgu ile elde edilemeyecek değerleri (örneğin genel bir ortalamayı) hesaplayıp ana sorguda kullanmak için yazılır. Alt sorgular SELECT, FROM veya WHERE bloklarında yer alabilir.WHERE İçinde Alt Sorgular (Filtreleme): Ana sorguyu filtrelemek için skaler (tek bir sayı) veya liste (birden fazla değer) üreten alt sorgulardır.Örneğin, atılan toplam golün, ligin genel gol ortalamasının 3 katından fazla olduğu maçları bulmak:SQLSELECT date, home_goal, away_goal
+
+3. Alt Sorgular (Subqueries)Alt sorgular (iç içe sorgular), karmaşık filtrelemeler yapmak veya tek bir sorgu ile elde edilemeyecek değerleri (örneğin genel bir ortalamayı) hesaplayıp ana sorguda kullanmak için yazılır. Alt sorgular SELECT, FROM veya WHERE bloklarında yer alabilir.WHERE İçinde Alt Sorgular (Filtreleme): Ana sorguyu filtrelemek için skaler (tek bir sayı) veya liste (birden fazla değer) üreten alt sorgulardır.Örneğin, atılan toplam golün, ligin genel gol ortalamasının 3 katından fazla olduğu maçları bulmak:```sql
+SELECT date, home_goal, away_goal
 FROM matches_2013_2014
 WHERE (home_goal + away_goal) > 
        (SELECT 3 * AVG(home_goal + away_goal)
-        FROM matches_2013_2014); 
+        FROM matches_2013_2014);
+
 *   Örneğin, `match` tablosundaki ev sahibi takımların ID'lerini bir liste olarak alıp, `NOT IN` ile eşleşmeyenleri hariç tutmak:
-SQLSELECT team_long_name, team_short_name
+```sql
+SELECT team_long_name, team_short_name
 FROM team 
 WHERE team_api_id NOT IN 
      (SELECT DISTINCT hometeam_id FROM match);
-FROM İçinde Alt Sorgular: Veriyi nihai sonuca eklemeden önce alt sorgu içinde dönüştürüp, ardından onu geçici bir tablo (AS subq gibi) olarak düşünüp ana sorgudaki diğer tablolarla JOIN ile birleştirmek için kullanılır:SQLSELECT sub.country_name, COUNT(sub.id) AS matches
+
+FROM İçinde Alt Sorgular: Veriyi nihai sonuca eklemeden önce alt sorgu içinde dönüştürüp, ardından onu geçici bir tablo (AS subq gibi) olarak düşünüp ana sorgudaki diğer tablolarla JOIN ile birleştirmek için kullanılır:```sql
+SELECT sub.country_name, COUNT(sub.id) AS matches
 FROM country AS c
 INNER JOIN (SELECT c.name AS country_name, m.id 
             FROM match AS m
@@ -194,7 +207,9 @@ INNER JOIN (SELECT c.name AS country_name, m.id
             WHERE (m.home_goal + m.away_goal) >= 10) AS sub
 ON c.name = sub.country_name
 GROUP BY sub.country_name;
-SELECT İçinde Alt Sorgular: Her satır için tekil bir hesaplama (Örn: Tüm sezonun genel ortalama gol sayısı) yapıp, bu değeri ana sorgudaki her satırda göstermek veya ana sorgunun sonuçlarıyla (Örn: Ligin ortalama golü) doğrudan karşılaştırmak için kullanılır:SQLSELECT 
+
+SELECT İçinde Alt Sorgular: Her satır için tekil bir hesaplama (Örn: Tüm sezonun genel ortalama gol sayısı) yapıp, bu değeri ana sorgudaki her satırda göstermek veya ana sorgunun sonuçlarıyla (Örn: Ligin ortalama golü) doğrudan karşılaştırmak için kullanılır:```sql
+SELECT 
     l.name AS league,
     ROUND(AVG(m.home_goal + m.away_goal), 2) AS avg_goals,
     (SELECT ROUND(AVG(home_goal + away_goal), 2) 
