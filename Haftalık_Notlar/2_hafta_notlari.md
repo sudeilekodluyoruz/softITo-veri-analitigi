@@ -241,3 +241,83 @@ LEFT JOIN match AS m ON l.country_id = m.country_id
 WHERE m.season = '2013/2014'
 GROUP BY l.name;
 ```
+##  10. Gün: PostgreSQL Veri Tipi Dönüşümleri, İç İçe Sorgular ve CTE (Ortak Tablo İfadeleri) (23 EKİM 2026)
+
+Bugün pgAdmin üzerinden `eu_soccer` veritabanını yapılandırmaya devam ettik. Tablo sütunlarındaki veri tiplerini güncellemeyi (casting) ve ardından çok daha karmaşık veri setlerini analiz edebilmek için "İlişkili Alt Sorgular", "İç İçe Sorgular" ve "CTE (Common Table Expressions)" kavramlarını işledik.
+
+### 1. PostgreSQL'de Veri Tipi Değiştirme (Casting)
+Veritabanına aktarılan CSV dosyalarında bazen sayısal veriler metin (text/varchar) formatında gelebilir. Sütunun veri tipini tam sayıya (`integer`) dönüştürmek için `ALTER TABLE` komutu kullanılır. 
+PostgreSQL'de metni sayıya çevirirken doğrudan veri tipini değiştirmek yetmez, `USING` ifadesi ile açıkça bir dönüşüm (cast) yapılması gerektiğini belirttik:
+
+```sql
+ALTER TABLE your_table_name
+ALTER COLUMN your_column_name TYPE integer
+USING your_column_name::integer;
+```
+
+### 2. İlişkili Alt Sorgular (Correlated Subqueries)
+İlişkili alt sorgular, ana sorgudaki (main query) bir veya daha fazla sütuna referans veren alt sorgulardır. 
+* Çalışmak için ana sorgudaki bilgilere ihtiyaç duyarlar, bu yüzden tek başlarına (izole olarak) çalıştırılamazlar.
+* Ana sorgunun getirdiği **her bir satır için yeniden değerlendirilirler**. Bu yüzden standart alt sorgulara göre daha fazla işlem gücü gerektirirler.
+* Örneğin, bir ülkedeki maçların gol sayısını, **kendi ülkesinin** gol ortalamasıyla kıyaslamak için `WHERE` içinde ana tablo ile alt tablo `country_id` üzerinden eşitlenir:
+
+```sql
+SELECT 
+    main.country_id,
+    main.date,
+    main.home_goal,
+    main.away_goal
+FROM match AS main
+WHERE (home_goal + away_goal) > 
+    (SELECT AVG((sub.home_goal + sub.away_goal) * 3)
+     FROM match AS sub
+     -- Ana sorgu ile alt sorguyu birbirine bağlama (ilişkilendirme)
+     WHERE main.country_id = sub.country_id);
+```
+
+### 3. İç İçe Alt Sorgular (Nested Subqueries)
+Bazı durumlarda veriyi doğru gruplamak veya bir fonksiyonun sonucunu başka bir fonksiyona sokmak (örneğin bir `COUNT` değerinin `AVG` ortalamasını almak) için alt sorguları `FROM` ifadesinin içinde "iç içe" (nested) yazmamız gerekir.
+* Dönüşümleri adım adım yapmak verinin kontrolünü sağlar.
+* Örneğin; önce 5'ten fazla gol atılan maçları bulur, sonra bunları sayar ve en dıştaki sorguda bunların ortalamasını alırız:
+
+```sql
+SELECT
+    c.name AS country,
+    AVG(outer_s.matches) AS avg_seasonal_high_scores
+FROM country AS c
+LEFT JOIN (
+    SELECT country_id, season, COUNT(id) AS matches
+    FROM (
+        SELECT country_id, season, id
+        FROM match
+        WHERE home_goal >= 5 OR away_goal >= 5
+    ) AS inner_s
+    GROUP BY country_id, season
+) AS outer_s
+ON c.id = outer_s.country_id
+GROUP BY country;
+```
+
+### 4. Ortak Tablo İfadeleri (Common Table Expressions - CTE)
+İç içe yazılmış birden fazla alt sorgu okumayı çok zorlaştırır. Bunun yerine bir alt sorguyu `WITH` komutuyla ana sorgudan önce bir **CTE (Common Table Expression)** olarak tanımlarız. 
+* Kod mantıksal bir sıraya oturur ve çok daha temiz, okunabilir hale gelir.
+* Tanımlanan CTE, normal bir tabloymuş gibi ana sorguda defalarca `JOIN` edilebilir:
+
+```sql
+-- CTE'nin tanımlanması
+WITH match_list AS (
+    SELECT 
+        country_id, 
+        id
+    FROM match
+    WHERE (home_goal + away_goal) >= 10
+)
+
+-- CTE kullanılarak ana sorgunun yazılması
+SELECT
+    l.name AS league,
+    COUNT(match_list.id) AS matches
+FROM league AS l
+LEFT JOIN match_list ON l.id = match_list.country_id
+GROUP BY l.name;
+```
